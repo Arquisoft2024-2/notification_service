@@ -28,3 +28,29 @@ async def create_notification(notification: NotificationCreate, db=Depends(get_d
         "message": message,
         "date": date
     }
+
+
+@app.delete("/notifications/first/")
+async def delete_first_notification(db=Depends(get_db)):
+    first_notification = await db.notifications.find_one({}, sort=[("date", 1)])
+    
+    if not first_notification:
+        raise HTTPException(status_code=404, detail="No notifications found")
+
+    await db.notifications.delete_one({"_id": first_notification["_id"]})
+    return {"message": "First notification deleted successfully"}
+
+@app.get("/notifications/first10/")
+async def get_first_10_notifications(db=Depends(get_db)):
+    notifications_cursor = db.notifications.find().sort("date", -1).limit(10)
+    notifications_list = await notifications_cursor.to_list(length=10)  # Ensures we get only 10 items
+
+    return [
+        {
+            "id_notification": notification["id_notification"],
+            "message": notification["message"],
+            "id_user": notification["id_user"],
+            "date": notification["date"]
+        }
+        for notification in notifications_list
+    ]
