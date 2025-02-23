@@ -2,9 +2,7 @@
 
 # run the program
 
-- docker run -d --name mongodb -p 27017:27017 mongo\
-- pip install -r requirements.txt
--  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+docker-compose up --build
 
 # testing
 
@@ -26,3 +24,7 @@ response
   "message": "alejandra: limpiar caneca (Status: completado)",
   "date": "2025-02-10T08:43:51.008036"
 }
+# stop containers
+
+-docker-compose stop
+-docker-compose down -v
