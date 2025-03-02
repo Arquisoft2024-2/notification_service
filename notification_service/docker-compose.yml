@@ -1,25 +1,11 @@
 version: "3.8"
 
 services:
-  mongo:
-    image: mongo
-    container_name: mongodb
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
   api:
     build: .
     container_name: fastapi_notification_service
     restart: always
     ports:
-      - "8000:8000"
-    depends_on:
-      - mongo
+      - "8100:8000"
     environment:
       MONGO_URI: "mongodb://mongo:27017"
-
-volumes:
-  mongo_data:
